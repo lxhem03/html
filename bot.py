@@ -49,11 +49,6 @@ class Bot (Client):
         
         await self.send_message(Config.ADMIN, f"**__{me.first_name}  Iꜱ Sᴛᴀʀᴛᴇᴅ.....✨️__**")
 
-        
-        try:
-            except:
-            print("Pʟᴇᴀꜱᴇ Mᴀᴋᴇ Tʜɪꜱ Iꜱ Aᴅᴍɪɴ Iɴ Yᴏᴜʀ Lᴏɢ Cʜᴀɴɴᴇʟ")
-
     async def stop(self, *args):
         await super().stop()
         logging.info("Bot Stopped ⛔")
