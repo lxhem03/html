@@ -13,8 +13,8 @@ class Config(object):
     FORCE_SUB) else None
    
     # database config
-    DB_URL  = os.environ.get("DB_URL", "")  # ⚠️ Required
-    DB_NAME  = os.environ.get("DB_NAME","SnowEncoderBot") 
+    DB_URL  = os.environ.get("DB_URL", "mongodb+srv://python21java:8ZFGYMKJCqAPwsiO@filestore.f876hjv.mongodb.net/?retryWrites=true&w=majority&appName=Filestore")  # ⚠️ Required
+    DB_NAME  = os.environ.get("DB_NAME","Bankao")  
 
     # Other Configs 
     ADMIN = int(os.environ.get("ADMIN", "1705634892")) # ⚠️ Required
@@ -28,13 +28,26 @@ class Config(object):
 
 
     caption = """
-**File Name**: {0}
+__**🎬 {0}**__
+──────────────
+**💾 Original:** __{1}__
+**📦 Encoded:** __{2}__
+**📉 Compression:** __{3}__
+──────────────
+*,⏱️ Downloaded:** __{4}__
+**⏱️ Encoded:** __{5}__
+**⏱️ Uploaded:** __{6}__
+──────────────
+"""
 
-**Original File Size:** {1}
-**Encoded File Size:** {2}
-**Compression Percentage:** {3}
-
-__Downloaded in {4}__
-__Encoded in {5}__
-__Uploaded in {6}__
+    dump = """
+__**🎬 {0}**__
+──────────────
+**💾 Original:** __{1}__
+**📦 Encoded:** __{2}__
+**📉 Compression:** __{3}__
+──────────────
+*,👤 Mention:** {4}
+**👤 ID:** `{5}`
+──────────────
 """
