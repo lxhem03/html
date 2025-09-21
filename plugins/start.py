@@ -93,7 +93,6 @@ async def cancel_process(bot:Client, message:Message):
         shutil.rmtree(f"ffmpeg/{message.from_user.id}")
         shutil.rmtree(f"Renames/{message.from_user.id}")
         shutil.rmtree(f"Metadata/{message.from_user.id}")
-        shutil.rmtree(f"Screenshot_Generation/{message.from_user.id}")
         
         return await message.reply_text(text="**Canceled All On Going Processes ✅**")
     except BaseException:
