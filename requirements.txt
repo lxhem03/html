@@ -6,7 +6,6 @@ ffmpeg-python
 aiohttp
 motor
 pytz
-pyromod
 psutil
 Pillow
 humanize
