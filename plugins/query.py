@@ -26,8 +26,8 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         btn = [
             [InlineKeyboardButton(text='❗ Hᴇʟᴘ', callback_data='help'), InlineKeyboardButton(
                 text='🌨️ Aʙᴏᴜᴛ', callback_data='about')],
-            [InlineKeyboardButton(text='📢 Uᴘᴅᴀᴛᴇs', url='https://t.me/AIORFT'), InlineKeyboardButton
-                (text='💻 Dᴇᴠᴇʟᴏᴘᴇʀ', url='https://t.me/Snowball_Official')]
+            [InlineKeyboardButton(text='📢 Uᴘᴅᴀᴛᴇs', url='https://t.me/The_TGguy'), InlineKeyboardButton
+                (text='💻 Support', url='https://t.me/Tg_Guy_Support')]
         ]
         await query.message.edit(text=Txt.PRIVATE_START_MSG.format(query.from_user.mention), reply_markup=InlineKeyboardMarkup(btn))
 
@@ -63,7 +63,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
                        query.message.reply_to_message.media.value)
 
         text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{file.file_name}`\n\n**File Size** :- `{humanize.naturalsize(file.file_size)}`"""
-        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", callback_data=f"rename-{query.from_user.id}")],
+        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", ,url="https://t.me/TGXrenamerobot")],
                    [InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{query.from_user.id}")]]
 
         await query.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
