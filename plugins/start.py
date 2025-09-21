@@ -67,7 +67,7 @@ async def Files_Option(bot:Client, message:Message):
     try:
         text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
 
-        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", callback_data=f"rename-{message.from_user.id}")],
+        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", url="https://t.me/TGXrenamerobot")],
                    [InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{message.from_user.id}")]]
         await SnowDev.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
         
@@ -78,7 +78,7 @@ async def Files_Option(bot:Client, message:Message):
         await floodmsg.delete()
 
         text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
-        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", callback_data=f"rename-{message.from_user.id}")],
+        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", url="https://t.me/TGXrenamerobot")],
                    [InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{message.from_user.id}")]]
         await SnowDev.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
 
@@ -87,13 +87,14 @@ async def Files_Option(bot:Client, message:Message):
 
 @Client.on_message((filters.private | filters.group) & filters.command('cancel'))
 async def cancel_process(bot:Client, message:Message):
+    user = message.from_user.id
     
     try:
+        await Client.send_message(user, "**Canceled All On Going Processes ✅**")
         shutil.rmtree(f"encode/{message.from_user.id}")
         shutil.rmtree(f"ffmpeg/{message.from_user.id}")
         shutil.rmtree(f"Renames/{message.from_user.id}")
         shutil.rmtree(f"Metadata/{message.from_user.id}")
         
-        return await message.reply_text(text="**Canceled All On Going Processes ✅**")
     except BaseException:
         pass
