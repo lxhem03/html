@@ -79,61 +79,173 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         await SnowDev.edit("✅️ __**Fғᴍᴘᴇɢ Cᴏᴅᴇ Sᴇᴛ Sᴜᴄᴄᴇssғᴜʟʟʏ**__")
 
 
+    # ── Compression Menu ────────────────────────────────────────────────
     elif data.startswith('compress'):
         user_id = data.split('-')[1]
 
         if int(user_id) not in [query.from_user.id, 0]:
-            return await query.answer(f"⚠️ Hᴇʏ {query.from_user.first_name}\nTʜɪs ɪs ɴᴏᴛ ʏᴏᴜʀ ғɪʟᴇ ʏᴏᴜ ᴄᴀɴ'ᴛ ᴅᴏ ᴀɴʏ ᴏᴘᴇʀᴀᴛɪᴏɴ", show_alert=True)
+            return await query.answer(
+                f"⚠️ Hᴇʏ {query.from_user.first_name}\nTʜɪs ɪs ɴᴏᴛ ʏᴏᴜʀ ғɪʟᴇ ʏᴏᴜ ᴄᴀɴ'ᴛ ᴅᴏ ᴀɴʏ ᴏᴘᴇʀᴀᴛɪᴏɴ",
+                show_alert=True
+            )
 
-        else:
+        BTNS = [
+            [InlineKeyboardButton("🎞️ libx264", callback_data=f"x264-{user_id}")],
+            [InlineKeyboardButton("🎞️ libx265", callback_data=f"x265-{user_id}")],
+            [InlineKeyboardButton("Cᴜsᴛᴏᴍ FFMPEG 🗜️", callback_data="custompc")],
+            [InlineKeyboardButton("✘ Cʟᴏsᴇ", callback_data="close"),
+             InlineKeyboardButton("⟸ Bᴀᴄᴋ", callback_data="option")]
+        ]
+        await query.message.edit(
+            text="**Select the Video Codec 👇**",
+            reply_markup=InlineKeyboardMarkup(BTNS)
+        )
 
-            BTNS = [
-                [InlineKeyboardButton(text='480ᴘ', callback_data='480pc'), InlineKeyboardButton(
-                    text='720ᴘ', callback_data='720pc')],
-                [InlineKeyboardButton(text='1080ᴘ', callback_data='1080pc'), InlineKeyboardButton(
-                    text='4ᴋ', callback_data='2160pc')],
-                [InlineKeyboardButton(
-                    text='Cᴜsᴛᴏᴍ Eɴᴄᴏᴅɪɴɢ 🗜️', callback_data='custompc')],
-                [InlineKeyboardButton(text='✘ Cʟᴏꜱᴇ', callback_data='close'), InlineKeyboardButton(
-                    text='⟸ Bᴀᴄᴋ', callback_data='option')]
-            ]
-            await query.message.edit(text='**Select the Compression Method Below 👇 **', reply_markup=InlineKeyboardMarkup(BTNS))
+# ── Codec → Quality Menu (libx264) ───────────────────────────────────
+    elif data.startswith("x264-"):
+        user_id = data.split("-")[1]
+        BTNS = [
+            [InlineKeyboardButton("144p", callback_data=f"x264-144-{user_id}"),
+             InlineKeyboardButton("240p", callback_data=f"x264-240-{user_id}")],
+            [InlineKeyboardButton("360p", callback_data=f"x264-360-{user_id}"),
+             InlineKeyboardButton("480p", callback_data=f"x264-480-{user_id}")],
+            [InlineKeyboardButton("540p", callback_data=f"x264-540-{user_id}"),
+             InlineKeyboardButton("720p", callback_data=f"x264-720-{user_id}")],
+            [InlineKeyboardButton("1080p", callback_data=f"x264-1080-{user_id}")],
+            [InlineKeyboardButton("⟸ Back", callback_data=f"compress-{user_id}")]
+        ]
+        await query.message.edit("**Codec Selected: libx264**\n\nNow choose a quality 👇",
+                                 reply_markup=InlineKeyboardMarkup(BTNS))
 
-    elif data == '480pc':
+# ── Codec → Quality Menu (libx265) ───────────────────────────────────
+    elif data.startswith("x265-"):
+        user_id = data.split("-")[1]
+        BTNS = [
+            [InlineKeyboardButton("144p", callback_data=f"x265-144-{user_id}"),
+             InlineKeyboardButton("240p", callback_data=f"x265-240-{user_id}")],
+            [InlineKeyboardButton("360p", callback_data=f"x265-360-{user_id}"),
+             InlineKeyboardButton("480p", callback_data=f"x265-480-{user_id}")],
+            [InlineKeyboardButton("540p", callback_data=f"x265-540-{user_id}"),
+             InlineKeyboardButton("720p", callback_data=f"x265-720-{user_id}")],
+            [InlineKeyboardButton("1080p", callback_data=f"x265-1080-{user_id}")],
+            [InlineKeyboardButton("⟸ Back", callback_data=f"compress-{user_id}")]
+        ]
+        await query.message.edit("**Codec Selected: libx265**\n\nNow choose a quality 👇",
+                                 reply_markup=InlineKeyboardMarkup(BTNS))
+
+
+# ── Final Compression Calls (libx264) ────────────────────────────────
+    elif data.startswith("x264-144-"):
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
-            ffmpeg = "-preset veryfast -c:v libx264 -s 840x480 -x265-params 'bframes=8:psy-rd=1:ref=3:aq-mode=3:aq-strength=0.8:deblock=1,1' -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -c:s copy -map 0 -ac 2 -ab 32k -vbr 2 -level 3.1 -threads 5"
+            ffmpeg = "-preset faster -c:v libx264 -s 256x144 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
             await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
-
         except Exception as e:
             print(e)
 
-    elif data == '720pc':
+    elif data.startswith("x264-240-"):
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
-            ffmpeg = "-preset veryfast -c:v libx264 -s 1280x720 -x265-params 'bframes=8:psy-rd=1:ref=3:aq-mode=3:aq-strength=0.8:deblock=1,1' -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -c:s copy -map 0 -ac 2 -ab 32k -vbr 2 -level 3.1 -threads 5"
+            ffmpeg = "-preset faster -c:v libx264 -s 426x240 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
             await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
-
         except Exception as e:
             print(e)
 
-    elif data == '1080pc':
-
+    elif data.startswith("x264-360-"):
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
-            ffmpeg = "-preset veryfast -c:v libx264 -s 1920x1080 -x265-params 'bframes=8:psy-rd=1:ref=3:aq-mode=3:aq-strength=0.8:deblock=1,1' -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -c:s copy -map 0 -ac 2 -ab 32k -vbr 2 -level 3.1 -threads 5"
+            ffmpeg = "-preset faster -c:v libx264 -s 640x360 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
             await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
-
         except Exception as e:
             print(e)
 
-    elif data == '2160pc':
-
+    elif data.startswith("x264-480-"):
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
-            ffmpeg = "-preset veryfast -c:v libx264 -s 3840x2160 -x265-params 'bframes=8:psy-rd=1:ref=3:aq-mode=3:aq-strength=0.8:deblock=1,1' -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -c:s copy -map 0 -ac 2 -ab 32k -vbr 2 -level 3.1 -threads 5"
+            ffmpeg = "-preset faster -c:v libx264 -s 854x480 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
             await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
 
+    elif data.startswith("x264-540-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset veryfast -c:v libx264 -s 960x540 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+    elif data.startswith("x264-720-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset veryfast -c:v libx264 -s 1280x720 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+    elif data.startswith("x264-1080-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset veryfast -c:v libx264 -s 1920x1080 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+
+# ── Final Compression Calls (libx265) ────────────────────────────────
+    elif data.startswith("x265-144-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset faster -c:v libx265 -s 256x144 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+    elif data.startswith("x265-240-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset faster -c:v libx265 -s 426x240 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+    elif data.startswith("x265-360-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset faster -c:v libx265 -s 640x360 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+    elif data.startswith("x265-480-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset faster -c:v libx265 -s 854x480 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+    elif data.startswith("x265-540-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset veryfast -c:v libx265 -s 960x540 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+    elif data.startswith("x265-720-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset veryfast -c:v libx265 -s 1280x720 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
+        except Exception as e:
+            print(e)
+
+    elif data.startswith("x265-1080-"):
+        try:
+            c_thumb = await db.get_thumbnail(query.from_user.id)
+            ffmpeg = "-preset veryfast -c:v libx265 -s 1920x1080 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
+            await CompressVideo(bot=bot, query=query, ffmpegcode=ffmpeg, c_thumb=c_thumb)
         except Exception as e:
             print(e)
 
