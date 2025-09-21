@@ -52,15 +52,11 @@ Send me the correct ffmpeg code for more info.
 Available commands:-
 
 ➜ /set_ffmpeg - To set custom ffmpeg code
-➜ /set_metadata - To set custom metadata code
-➜ /set_caption - To set custom caption
 ➜ /del_ffmpeg - Delete the custom ffmpeg code
-➜ /del_caption - Delete caption
 ➜ /see_ffmpeg - View custom ffmpeg code
-➜ /see_metadata - View custom metadata code
-➜ /see_caption - View caption 
 ➜ To Set Thumbnail just send photo
-
+➜ /view_thumb - To See current User Thumbnail 
+➜ /del_thumb - To delete user's custom thumbnail
 """
 
     ABOUT_TXT = """◇──◇──◇──◇──◇──◇──◇──◇
