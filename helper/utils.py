@@ -287,7 +287,7 @@ async def CompressVideo(bot, query, ffmpegcode, c_thumb):
                 progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
 
         if Config.DUMP_CHANNEL is not None:
-                    await upload_client.send_video(
+                    await bot.send_video(
                         Config.DUMP_CHANNEL,
                         video=Output_Path,
                         thumb=ph_path,
