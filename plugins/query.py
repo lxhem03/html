@@ -90,8 +90,8 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
             )
 
         BTNS = [
-            [InlineKeyboardButton("🎞️ libx264", callback_data=f"x264-{user_id}")],
-            [InlineKeyboardButton("🎞️ libx265", callback_data=f"x265-{user_id}")],
+            [InlineKeyboardButton("🎞️ libx264", callback_data="avc")],
+            [InlineKeyboardButton("🎞️ libx265", callback_data="hevc")],
             [InlineKeyboardButton("Cᴜsᴛᴏᴍ FFMPEG 🗜️", callback_data="custompc")],
             [InlineKeyboardButton("✘ Cʟᴏsᴇ", callback_data="close"),
              InlineKeyboardButton("⟸ Bᴀᴄᴋ", callback_data="option")]
@@ -102,40 +102,40 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         )
 
 # ── Codec → Quality Menu (libx264) ───────────────────────────────────
-    elif data.startswith("x264-"):
+    elif data.startswith("avc"):
         user_id = data.split("-")[1]
         BTNS = [
-            [InlineKeyboardButton("144p", callback_data=f"x264-144-{user_id}"),
-             InlineKeyboardButton("240p", callback_data=f"x264-240-{user_id}")],
-            [InlineKeyboardButton("360p", callback_data=f"x264-360-{user_id}"),
-             InlineKeyboardButton("480p", callback_data=f"x264-480-{user_id}")],
-            [InlineKeyboardButton("540p", callback_data=f"x264-540-{user_id}"),
-             InlineKeyboardButton("720p", callback_data=f"x264-720-{user_id}")],
-            [InlineKeyboardButton("1080p", callback_data=f"x264-1080-{user_id}")],
-            [InlineKeyboardButton("⟸ Back", callback_data=f"compress-{user_id}")]
+            [InlineKeyboardButton("144p", callback_data="144avc"),
+             InlineKeyboardButton("240p", callback_data="240avc")],
+            [InlineKeyboardButton("360p", callback_data="360avc"),
+             InlineKeyboardButton("480p", callback_data="480avc")],
+            [InlineKeyboardButton("540p", callback_data="540avc"),
+             InlineKeyboardButton("720p", callback_data="720avc")],
+            [InlineKeyboardButton("1080p", callback_data="1080avc")],
+            [InlineKeyboardButton("⟸ Back", callback_data=f"compress-{query.from_user.id")]
         ]
-        await query.message.edit("**Codec Selected: libx264**\n\nNow choose a quality 👇",
+        await query.message.edit("**Codec Selected: __libx264 (AVC)__**\n\nNow choose a quality 👇",
                                  reply_markup=InlineKeyboardMarkup(BTNS))
 
 # ── Codec → Quality Menu (libx265) ───────────────────────────────────
-    elif data.startswith("x265-"):
+    elif data.startswith("hevc"):
         user_id = data.split("-")[1]
         BTNS = [
-            [InlineKeyboardButton("144p", callback_data=f"x265-144-{user_id}"),
-             InlineKeyboardButton("240p", callback_data=f"x265-240-{user_id}")],
-            [InlineKeyboardButton("360p", callback_data=f"x265-360-{user_id}"),
-             InlineKeyboardButton("480p", callback_data=f"x265-480-{user_id}")],
-            [InlineKeyboardButton("540p", callback_data=f"x265-540-{user_id}"),
-             InlineKeyboardButton("720p", callback_data=f"x265-720-{user_id}")],
-            [InlineKeyboardButton("1080p", callback_data=f"x265-1080-{user_id}")],
-            [InlineKeyboardButton("⟸ Back", callback_data=f"compress-{user_id}")]
+            [InlineKeyboardButton("144p", callback_data="144hevc"),
+             InlineKeyboardButton("240p", callback_data="240hevc")],
+            [InlineKeyboardButton("360p", callback_data="360hevc"),
+             InlineKeyboardButton("480p", callback_data="480hevc")],
+            [InlineKeyboardButton("540p", callback_data="540hevc"),
+             InlineKeyboardButton("720p", callback_data="720hevc")],
+            [InlineKeyboardButton("1080p", callback_data="1080hevc")],
+            [InlineKeyboardButton("⟸ Back", callback_data=f"compress-{query.from_user.id}")]
         ]
-        await query.message.edit("**Codec Selected: libx265**\n\nNow choose a quality 👇",
+        await query.message.edit("**Codec Selected: __libx265 (HEVC)__**\n\nNow choose a quality 👇",
                                  reply_markup=InlineKeyboardMarkup(BTNS))
 
 
 # ── Final Compression Calls (libx264) ────────────────────────────────
-    elif data.startswith("x264-144-"):
+    elif data == '144avc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset faster -c:v libx264 -s 256x144 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -143,7 +143,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x264-240-"):
+    elif data == '240avc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset faster -c:v libx264 -s 426x240 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -151,7 +151,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x264-360-"):
+    elif data == '360avc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset faster -c:v libx264 -s 640x360 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -159,7 +159,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x264-480-"):
+    elif data == '480avc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset faster -c:v libx264 -s 854x480 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -167,7 +167,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x264-540-"):
+    elif data == '540avc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset veryfast -c:v libx264 -s 960x540 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -175,7 +175,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x264-720-"):
+    elif data == '720avc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset veryfast -c:v libx264 -s 1280x720 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -183,7 +183,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x264-1080-"):
+    elif data == '1080avc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset veryfast -c:v libx264 -s 1920x1080 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -193,7 +193,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
 
 
 # ── Final Compression Calls (libx265) ────────────────────────────────
-    elif data.startswith("x265-144-"):
+    elif data == '144hevc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset faster -c:v libx265 -s 256x144 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -201,7 +201,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x265-240-"):
+    elif data == '240hevc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset faster -c:v libx265 -s 426x240 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -209,7 +209,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x265-360-"):
+    elif data == '360hevc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset faster -c:v libx265 -s 640x360 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -217,7 +217,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x265-480-"):
+    elif data == '480hevc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset faster -c:v libx265 -s 854x480 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -225,7 +225,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x265-540-"):
+    elif data == '540hevc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset veryfast -c:v libx265 -s 960x540 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -233,7 +233,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x265-720-"):
+    elif data == '720hevc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset veryfast -c:v libx265 -s 1280x720 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
@@ -241,7 +241,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data.startswith("x265-1080-"):
+    elif data == '1080hevc':
         try:
             c_thumb = await db.get_thumbnail(query.from_user.id)
             ffmpeg = "-preset veryfast -c:v libx265 -s 1920x1080 -pix_fmt yuv420p -crf 30 -c:a libopus -b:a 32k -ac 2 -vbr 2"
