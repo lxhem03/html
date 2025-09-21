@@ -14,10 +14,8 @@ class Database:
         return dict(
             id=int(id),
             join_date=datetime.date.today().isoformat(),
-            caption=None,
             thumbnail=None,
             ffmpegcode=None,
-            metadata=""" -map 0 -c:s copy -c:a copy -c:v copy -metadata:s:v title="Title" """,
             ban_status=dict(
                 is_banned=False,
                 ban_duration=0,
@@ -26,13 +24,6 @@ class Database:
             )
         )
 
-    async def set_caption(self, user_id, caption):
-        await self.col.update_one({'id': int(user_id)}, {'$set': {'caption': caption}})
-
-    async def get_caption(self, id):
-        user = await self.col.find_one({'id': int(id)})
-        return user.get('caption', None)
-    
 
     async def set_thumbnail(self, user_id, thumbnail):
         await self.col.update_one({'id': int(user_id)}, {'$set': {'thumbnail': thumbnail}})
@@ -49,14 +40,6 @@ class Database:
         user = await self.col.find_one({'id': int(id)})
         return user.get('ffmpegcode', None)
     
-
-    async def set_metadata(self, user_id, metadata):
-        await self.col.update_one({'id': int(user_id)}, {'$set': {'metadata': metadata}})
-
-    async def get_metadata(self, id):
-        user = await self.col.find_one({'id': int(id)})
-        return user.get('metadata', None)
-
     async def add_user(self, b, m):
         u = m.from_user
         if not await self.is_user_exist(u.id):
