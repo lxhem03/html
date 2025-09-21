@@ -10,7 +10,6 @@ import logging.config, os
 from pytz import timezone
 from aiohttp import web
 from plugins.web_support import web_server
-import pyromod
 
 logging.config.fileConfig('logging.conf')
 logging.getLogger().setLevel(logging.INFO)
