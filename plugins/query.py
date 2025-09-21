@@ -63,7 +63,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
                        query.message.reply_to_message.media.value)
 
         text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{file.file_name}`\n\n**File Size** :- `{humanize.naturalsize(file.file_size)}`"""
-        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", ,url="https://t.me/TGXrenamerobot")],
+        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", url="https://t.me/TGXrenamerobot")],
                    [InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{query.from_user.id}")]]
 
         await query.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
