@@ -5,52 +5,6 @@ from script import Txt
 from asyncio.exceptions import TimeoutError
 
 
-@Client.on_message((filters.group | filters.private) & filters.command('set_caption'))
-async def add_caption(client, message):
-
-    if not await db.is_user_exist(message.from_user.id):
-        await CANT_CONFIG_GROUP_MSG(client, message)
-        return
-
-    if len(message.command) == 1:
-        return await message.reply_text("**__Gɪᴠᴇ Tʜᴇ Cᴀᴩᴛɪᴏɴ__\n\nExᴀᴍᴩʟᴇ:- `/set_caption {filename}\n\n💾 Sɪᴢᴇ: {filesize}\n\n⏰ Dᴜʀᴀᴛɪᴏɴ: {duration}`**")
-
-    SnowDev = await message.reply_text(text="**Please Wait...**", reply_to_message_id=message.id)
-    caption = message.text.split(" ", 1)[1]
-    await db.set_caption(message.from_user.id, caption=caption)
-    await message.reply_text("__**✅ Cᴀᴩᴛɪᴏɴ Sᴀᴠᴇᴅ**__")
-
-
-@Client.on_message((filters.group | filters.private) & filters.command('del_caption'))
-async def delete_caption(client, message):
-
-    if not await db.is_user_exist(message.from_user.id):
-        await CANT_CONFIG_GROUP_MSG(client, message)
-        return
-
-
-    SnowDev = await message.reply_text(text="**Please Wait...**", reply_to_message_id=message.id)
-    caption = await db.get_caption(message.from_user.id)
-    if not caption:
-        return await SnowDev.edit("__**😔 Yᴏᴜ Dᴏɴ'ᴛ Hᴀᴠᴇ Aɴy Cᴀᴩᴛɪᴏɴ**__")
-    await db.set_caption(message.from_user.id, caption=None)
-    await SnowDev.edit("__**❌️ Cᴀᴩᴛɪᴏɴ Dᴇʟᴇᴛᴇᴅ**__")
-
-
-@Client.on_message((filters.group | filters.private) & filters.command(['see_caption', 'view_caption']))
-async def see_caption(client, message):
-
-    if not await db.is_user_exist(message.from_user.id):
-        await CANT_CONFIG_GROUP_MSG(client, message)
-        return
-
-    caption = await db.get_caption(message.from_user.id)
-    if caption:
-        await message.reply_text(f"**Yᴏᴜ'ʀᴇ Cᴀᴩᴛɪᴏɴ:-**\n\n`{caption}`")
-    else:
-        await message.reply_text("__**😔 Yᴏᴜ Dᴏɴ'ᴛ Hᴀᴠᴇ Aɴy Cᴀᴩᴛɪᴏɴ**__")
-
-
 @Client.on_message((filters.group | filters.private) & filters.command(['view_thumb', 'viewthumb']))
 async def viewthumb(client, message):
 
