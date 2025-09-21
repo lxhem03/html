@@ -102,7 +102,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         )
 
 # ── Codec → Quality Menu (libx264) ───────────────────────────────────
-    elif data.startswith("avc"):
+    elif data == 'avc':
         user_id = data.split("-")[1]
         BTNS = [
             [InlineKeyboardButton("144p", callback_data="144avc"),
@@ -112,13 +112,13 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
             [InlineKeyboardButton("540p", callback_data="540avc"),
              InlineKeyboardButton("720p", callback_data="720avc")],
             [InlineKeyboardButton("1080p", callback_data="1080avc")],
-            [InlineKeyboardButton("⟸ Back", callback_data=f"compress-{query.from_user.id")]
+            [InlineKeyboardButton("⟸ Back", callback_data=f"compress-{query.from_user.id}")]
         ]
         await query.message.edit("**Codec Selected: __libx264 (AVC)__**\n\nNow choose a quality 👇",
                                  reply_markup=InlineKeyboardMarkup(BTNS))
 
 # ── Codec → Quality Menu (libx265) ───────────────────────────────────
-    elif data.startswith("hevc"):
+    elif data == 'hevc':
         user_id = data.split("-")[1]
         BTNS = [
             [InlineKeyboardButton("144p", callback_data="144hevc"),
