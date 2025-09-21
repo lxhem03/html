@@ -14,7 +14,7 @@ from config import Config
 from script import Txt
 from pyrogram import enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
-
+import subprocess
 
 QUEUE = []
 
@@ -180,6 +180,19 @@ async def skip(e, userid):
     
     return
 
+def get_video_duration(file_path):
+    """Extract the duration of a video file in seconds using ffprobe."""
+    try:
+        result = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", file_path],
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        )
+        return int(float(result.stdout))  # Duration in seconds
+    except Exception as e:
+        print(f"Error getting duration: {e}")
+        return 0
+
 async def CompressVideo(bot, query, ffmpegcode, c_thumb):
     UID = query.from_user.id
     ms = await query.message.edit('Pʟᴇᴀsᴇ Wᴀɪᴛ...\n\n**Fᴇᴛᴄʜɪɴɢ Qᴜᴇᴜᴇ 👥**')
@@ -257,6 +270,7 @@ async def CompressVideo(bot, query, ffmpegcode, c_thumb):
 
         org = int(Path(File_Path).stat().st_size)
         com = int((Path(Output_Path).stat().st_size))
+        duration = get_video_duration(Output_Path)
         pe = 100 - ((com / org) * 100)
         per = str(f"{pe:.2f}")  + "%"
         eees = dt.now()
@@ -271,6 +285,16 @@ async def CompressVideo(bot, query, ffmpegcode, c_thumb):
                 caption=Config.caption.format(filename, humanbytes(org), humanbytes(com) , per, x, xx, xxx),
                 progress=progress_for_pyrogram,
                 progress_args=("⚠️__**Please wait...**__\n🌨️ **Uᴩʟᴏᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+
+        if Config.DUMP_CHANNEL is not None:
+                    await upload_client.send_video(
+                        Config.DUMP_CHANNEL,
+                        video=Output_Path,
+                        thumb=ph_path,
+                        caption=Config.dump.format(filename, humanbytes(org), humanbytes(com), per, query.from_user.mention, query.from_user.id),
+                        duration=duration,  # Pass the duration
+                        supports_streaming=True
+                    )        
         
         if query.message.chat.type == enums.ChatType.SUPERGROUP:
             botusername = await bot.get_me()
