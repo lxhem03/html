@@ -14,6 +14,19 @@ from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 async def _(bot: Client, cmd: Message):
     await handle_user_status(bot, cmd)
 
+@Client.on_message((filters.private) & filters.command('register'))
+async def create_users(bot:Client, message:Message): 
+
+    user = message.from_user
+    v = await bot.send_message(message.from_user.id, text="**__Please wait.....__**")
+    try: 
+        await db.add_user(bot, msg)
+        dtext=f"{user.mention} __has been added to the database successfully__"
+        await v.edit(text=dtext)
+    except Exception as e:
+        etext=f"{user.mention} __**Error! Failed to add you in our Database**__\n\nError: {e}"
+        await v.edit(text=etext)
+
 @Client.on_message((filters.private | filters.group) & filters.command('start'))
 async def Handle_StartMsg(bot:Client, msg:Message):
             
