@@ -14,7 +14,7 @@ class Config(object):
    
     # database config
     DB_URL  = os.environ.get("DB_URL", "mongodb+srv://python21java:8ZFGYMKJCqAPwsiO@filestore.f876hjv.mongodb.net/?retryWrites=true&w=majority&appName=Filestore")  # ⚠️ Required
-    DB_NAME  = os.environ.get("DB_NAME","Bankao")  
+    DB_NAME  = os.environ.get("DB_NAME","Baka")  
 
     # Other Configs 
     ADMIN = int(os.environ.get("ADMIN", "1705634892")) # ⚠️ Required
