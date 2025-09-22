@@ -16,9 +16,7 @@ async def _(bot: Client, cmd: Message):
 
 @Client.on_message((filters.private | filters.group) & filters.command('start'))
 async def Handle_StartMsg(bot:Client, msg:Message):
-
-    if not await db.is_user_exist(msg.from_user.id):
-        await db.add_user(bot, msg)    
+            
 
     Snowdev = await msg.reply_text(text= '**Please Wait...**', reply_to_message_id=msg.id)
 
@@ -31,6 +29,7 @@ async def Handle_StartMsg(bot:Client, msg:Message):
         await Snowdev.edit(text=Txt.GROUP_START_MSG.format(msg.from_user.mention), reply_markup=InlineKeyboardMarkup(btn))
     
     else:
+        await db.add_user(bot, msg)
         btn = [
             [InlineKeyboardButton(text='❗ Hᴇʟᴘ', callback_data='help'), InlineKeyboardButton(text='🌨️ Aʙᴏᴜᴛ', callback_data='about')],
             [InlineKeyboardButton(text='📢 Uᴘᴅᴀᴛᴇs', url='https://t.me/The_TGguy'), InlineKeyboardButton(text='♥️ Support', url='https://t.me/Tg_Guy_Support')]
